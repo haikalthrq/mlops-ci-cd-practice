@@ -53,6 +53,7 @@ deploy:
 	huggingface-cli login --token "$(HF_TOKEN)"
 	mkdir -p deploy_temp
 	cp -r app/ deploy_temp/
+	cp -r model/ deploy_temp/
 	cp requirements.txt deploy_temp/
 	cp README.md deploy_temp/
 	cd deploy_temp && \
