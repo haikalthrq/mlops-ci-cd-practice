@@ -10,14 +10,14 @@ Project ini menggunakan dua GitHub Actions workflows untuk automasi CI/CD:
 
 Sebelum workflows dapat berjalan dengan baik, Anda perlu mengatur secrets di GitHub repository:
 
-### 1. Hugging Face Token (`HF_TOKEN`)
+### 1. Hugging Face Token (`HF`)
 1. Buka [Hugging Face Settings](https://huggingface.co/settings/tokens)
 2. Klik "New Token" 
 3. Pilih scope **"Write"** 
 4. Copy token yang dihasilkan
 5. Di GitHub repository, buka **Settings > Secrets and variables > Actions**
 6. Klik **"New repository secret"**
-7. Name: `HF_TOKEN`
+7. Name: `HF` (bukan HF_TOKEN)
 8. Value: Paste token dari Hugging Face
 
 ### 2. Hugging Face Space Setup
@@ -30,36 +30,29 @@ Sebelum workflows dapat berjalan dengan baik, Anda perlu mengatur secrets di Git
 
 ## 🔄 Workflows Explanation
 
-### 🎯 CI Workflow (`ci.yml`)
+### 🎯 CI Workflow (`ci.yml`) - Now Makefile-based
 **Triggers:**
 - Push ke branch `main`
 - Pull Request ke `main` 
 - Manual dispatch
 
 **Steps:**
-1. ✅ Checkout repository
-2. 🐍 Setup Python 3.10
-3. 📦 Install dependencies from `requirements.txt`
-4. 🔍 Run flake8 linting on `app/` folder
-5. 🧪 Run unit tests (if `tests/` folder exists)
-6. 🏋️ Run model training (if `train.py` exists)
-7. 📊 Run model evaluation (if `eval.py` exists)
-8. 📁 Upload artifacts (results, models, logs)
+1. ✅ Checkout Repository
+2.  Install Packages (`make install`)
+3. 🔍 Format Code (`make format`) 
+4. 🧪 Run Tests (`make test`)
+5. 🏋️ Train Model (`make train`)
+6. 📊 Evaluate Model (`make eval`)
+7. ⚙️ Update Branch configuration
 
-### 🚀 CD Workflow (`cd.yml`)
+### 🚀 CD Workflow (`cd.yml`) - Simplified
 **Triggers:**
 - When CI workflow completes successfully
 - Manual dispatch
 
 **Steps:**
-1. ✅ Checkout repository with Git LFS
-2. 🐍 Setup Python 3.10
-3. 🤗 Install Hugging Face CLI
-4. ⚙️ Configure Git with GitHub actor
-5. 🔑 Login to Hugging Face
-6. 📁 Prepare deployment files (app/, requirements.txt, README.md)
-7. 📦 Setup Git LFS for large files
-8. 🚀 Deploy to Hugging Face Spaces
+1. ✅ Checkout repository
+2. � Deploy to Hugging Face (`make deploy`)
 
 ## 🗂️ Project Structure Requirements
 
