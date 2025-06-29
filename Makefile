@@ -41,14 +41,16 @@ update-branch:
 
 deploy:
 	@echo "Deploying to Hugging Face Spaces..."
-	@echo "HF token length: $$(echo '$(HF)' | wc -c)"
-	pip install huggingface_hub[cli]
+	@echo "Checking HF token..."
 	@if [ -z "$(HF)" ]; then \
 		echo "❌ Error: HF token is empty!"; \
 		echo "Please check that HF secret is set in GitHub repository"; \
 		exit 1; \
+	else \
+		echo "✅ HF token is present"; \
 	fi
-	huggingface-cli login --token $(HF)
+	pip install huggingface_hub[cli]
+	huggingface-cli login --token "$(HF)"
 	mkdir -p deploy_temp
 	cp -r app/ deploy_temp/
 	cp requirements.txt deploy_temp/

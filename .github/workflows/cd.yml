@@ -17,8 +17,8 @@ jobs:
 
     - name: Deployment To Hugging Face
       env:
-        HF_TOKEN: ${{ secrets.HF }}
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
       run: |
-        echo "Starting deployment..."
-        echo "Token check: ${HF_TOKEN:0:8}..." 
+        echo "Starting deployment with HF token..."
+        echo "Token exists: $(if [ -n "$HF_TOKEN" ]; then echo "YES"; else echo "NO"; fi)"
         make deploy HF="$HF_TOKEN"
