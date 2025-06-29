@@ -51,29 +51,15 @@ deploy:
 	fi
 	pip install huggingface_hub[cli]
 	huggingface-cli login --token "$(HF_TOKEN)"
-	mkdir -p deploy_temp
-	cp -r app/ deploy_temp/
-	cp -r model/ deploy_temp/
-	cp requirements.txt deploy_temp/
-	cp README.md deploy_temp/
-	cd deploy_temp && \
-	git init -b master && \
-	git lfs install && \
-	git config user.name "$(USER_NAME)" && \
-	git config user.email "$(USER_EMAIL)" && \
-	echo "*.pkl filter=lfs diff=lfs merge=lfs -text" > .gitattributes && \
-	echo "*.joblib filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
-	echo "*.skops filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
-	echo "*.h5 filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
-	echo "*.bin filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
-	echo "*.safetensors filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
-	git add .gitattributes && \
-	git lfs track "*.skops" && \
-	git add . && \
-	git commit -m "Deploy ML app to Hugging Face Spaces" && \
-	git remote add space https://haikalthrq:$(HF_TOKEN)@huggingface.co/spaces/haikalthrq/mlops-ci-cd-practice && \
-	git push --force space master
-	@echo "Deployment completed!"
+	@echo "🚀 Uploading app files..."
+	huggingface-cli upload haikalthrq/mlops-ci-cd-practice ./app . --repo-type=space --commit-message="Deploy ML app files"
+	@echo "📁 Uploading model file..."
+	huggingface-cli upload haikalthrq/mlops-ci-cd-practice ./model/drug_pipeline.skops model/drug_pipeline.skops --repo-type=space --commit-message="Upload model file"
+	@echo "📋 Uploading requirements..."
+	huggingface-cli upload haikalthrq/mlops-ci-cd-practice ./requirements.txt requirements.txt --repo-type=space --commit-message="Upload requirements"
+	@echo "📄 Uploading README..."
+	huggingface-cli upload haikalthrq/mlops-ci-cd-practice ./README.md README.md --repo-type=space --commit-message="Upload README"
+	@echo "✅ Deployment completed!"
 
 run:
 	python app/app.py
