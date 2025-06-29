@@ -1,6 +1,6 @@
 import pandas as pd
 
-drug_df = pd.read_csv("Data/drug.csv")
+drug_df = pd.read_csv("data/drug.csv")
 drug_df = drug_df.sample(frac=1)
 drug_df.head(3)
 
@@ -42,13 +42,13 @@ pipe.fit(X_train, y_train)
 from sklearn.metrics import accuracy_score, f1_score
 
 predictions = pipe.predict(X_test)
-accuacy = accuracy_score(y_test, predictions)
+accuracy = accuracy_score(y_test, predictions)
 f1 = f1_score(y_test, predictions, average="macro")
 
-print("Accuracy:", str(round(accuacy, 2) * 100) + "%", "F1:", {round(f1, 2)})
+print("Accuracy:", str(round(accuracy, 2) * 100) + "%", "F1:", round(f1, 2))
 
-with open("Results/metric.txt", "w") as outfile:
-    outfile.write(f"\nAccuracy =  {round(accuacy, 2)}, F1 Score = {round(f1, 2)}.")
+with open("results/metric.txt", "w") as outfile:
+    outfile.write(f"\nAccuracy =  {round(accuracy, 2)}, F1 Score = {round(f1, 2)}.")
 
 
 import matplotlib.pyplot as plt
@@ -57,14 +57,14 @@ from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 cm = confusion_matrix(y_test, predictions, labels=pipe.classes_)
 disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=pipe.classes_)
 disp.plot()
-plt.savefig("Results/model_results.png", dpi=120)
+plt.savefig("results/model_results.png", dpi=120)
 
 import skops.io as sio
-from skops.io import dump, load, get_untrusted_types
+from skops.io import get_untrusted_types
 
-sio.dump(pipe, "Model/drug_pipeline.skops")
-unknown_types = get_untrusted_types(file="Model/drug_pipeline.skops")
+sio.dump(pipe, "model/drug_pipeline.skops")
+unknown_types = get_untrusted_types(file="model/drug_pipeline.skops")
 print(unknown_types)
 
-unknown_types = get_untrusted_types(file="Model/drug_pipeline.skops")
-sio.load("Model/drug_pipeline.skops", trusted=unknown_types)
+unknown_types = get_untrusted_types(file="model/drug_pipeline.skops")
+sio.load("model/drug_pipeline.skops", trusted=unknown_types)
