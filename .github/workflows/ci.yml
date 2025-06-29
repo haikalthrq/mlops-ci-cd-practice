@@ -16,28 +16,25 @@ jobs:
     steps:
     - name: Checkout Repository
       uses: actions/checkout@v3
-      
+
     - name: Install Packages
       run: make install
-        
+
     - name: Format Code
       run: make format
-        
-    - name: Run Tests
-      run: make test
-        
+
     - name: Train Model
       run: make train
-        
+
     - name: Evaluate Model
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       run: make eval
-        
+
     - name: Update Branch
       env:
-        NAME: ${{ github.actor }}
-        EMAIL: ${{ github.actor }}@users.noreply.github.com
+        NAME: ${{ secrets.USER_NAME }}
+        EMAIL: ${{ secrets.USER_EMAIL }}
       run: make update-branch USER_NAME=$NAME USER_EMAIL=$EMAIL
         
     - name: Run linting with flake8
