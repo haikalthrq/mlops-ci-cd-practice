@@ -63,9 +63,12 @@ deploy:
 	git config user.email "$(USER_EMAIL)" && \
 	echo "*.pkl filter=lfs diff=lfs merge=lfs -text" > .gitattributes && \
 	echo "*.joblib filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
+	echo "*.skops filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
 	echo "*.h5 filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
 	echo "*.bin filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
 	echo "*.safetensors filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
+	git add .gitattributes && \
+	git lfs track "*.skops" && \
 	git add . && \
 	git commit -m "Deploy ML app to Hugging Face Spaces" && \
 	git remote add space https://haikalthrq:$(HF_TOKEN)@huggingface.co/spaces/haikalthrq/mlops-ci-cd-practice && \
