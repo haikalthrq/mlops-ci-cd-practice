@@ -106,11 +106,15 @@ Jika Anda memiliki folder `tests/`, workflows akan otomatis menjalankan pytest.
    - Pastikan Space sudah dibuat di Hugging Face
    - Periksa nama space di workflow file
 
-3. **File terlalu besar**
+3. **"src refspec main does not match any" error**
+   - Fixed: Workflow sekarang menggunakan `git init -b main` untuk default branch
+   - Fallback: Jika git versi lama, akan otomatis checkout ke branch main
+
+4. **File terlalu besar**
    - Workflows sudah dikonfigurasi dengan Git LFS
    - File .pkl, .joblib, .h5, .bin, .safetensors akan otomatis menggunakan LFS
 
-4. **Dependencies error**
+5. **Dependencies error**
    - Pastikan `requirements.txt` mencantumkan semua dependencies
    - Periksa compatibility antar package
 

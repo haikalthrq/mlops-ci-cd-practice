@@ -75,8 +75,8 @@ jobs:
       run: |
         cd deploy_temp
         
-        # Initialize git repository
-        git init
+        # Initialize git repository with main branch
+        git init -b main || (git init && git checkout -b main)
         git lfs install
         
         # Add .gitattributes first
