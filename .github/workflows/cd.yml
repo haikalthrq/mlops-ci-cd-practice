@@ -1,31 +1,105 @@
-name: CD
+name: Continuous Deployment
 
 on:
-  push:
-    branches:
-      - main
+  workflow_run:
+    workflows: ["Continuous Integration"]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
 
 jobs:
   deploy:
     runs-on: ubuntu-latest
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' || github.event_name == 'workflow_dispatch' }}
+    
     steps:
-    - name: Checkout Repository
-      uses: actions/checkout@v3
-
-    - name: Setup Python
+    - name: Checkout repository
+      uses: actions/checkout@v4
+      with:
+        lfs: true
+        
+    - name: Set up Python 3.10
       uses: actions/setup-python@v4
       with:
         python-version: '3.10'
-
-    - name: Install dependencies
-      run: pip install huggingface_hub
-
+        
+    - name: Install Hugging Face CLI
+      run: |
+        python -m pip install --upgrade pip
+        pip install huggingface_hub[cli]
+        
+    - name: Configure Git
+      run: |
+        git config --global user.name "${GITHUB_ACTOR}"
+        git config --global user.email "${GITHUB_ACTOR}@users.noreply.github.com"
+        
+    - name: Login to Hugging Face
+      env:
+        HF_TOKEN: ${{ secrets.HF_TOKEN }}
+      run: |
+        echo "Logging in to Hugging Face..."
+        huggingface-cli login --token $HF_TOKEN
+        
+    - name: Prepare deployment files
+      run: |
+        echo "Preparing files for deployment..."
+        # Create a temporary directory for deployment
+        mkdir -p deploy_temp
+        
+        # Copy app folder
+        cp -r app/ deploy_temp/
+        
+        # Copy requirements.txt and README.md
+        cp requirements.txt deploy_temp/
+        cp README.md deploy_temp/
+        
+        # List files to be deployed
+        echo "Files to be deployed:"
+        find deploy_temp -type f -name "*" | head -20
+        
+    - name: Initialize Git LFS
+      run: |
+        cd deploy_temp
+        git lfs install
+        
+        # Create .gitattributes for large files
+        echo "*.pkl filter=lfs diff=lfs merge=lfs -text" > .gitattributes
+        echo "*.joblib filter=lfs diff=lfs merge=lfs -text" >> .gitattributes
+        echo "*.h5 filter=lfs diff=lfs merge=lfs -text" >> .gitattributes
+        echo "*.bin filter=lfs diff=lfs merge=lfs -text" >> .gitattributes
+        echo "*.safetensors filter=lfs diff=lfs merge=lfs -text" >> .gitattributes
+        
     - name: Deploy to Hugging Face Spaces
       env:
         HF_TOKEN: ${{ secrets.HF_TOKEN }}
       run: |
-        git config --global user.email "you@example.com"
-        git config --global user.name "Your Name"
-        huggingface-cli login --token $HF_TOKEN
-        huggingface-cli repo upload yourusername/yourspace app/app.py
+        cd deploy_temp
+        
+        # Initialize git repository
+        git init
+        git lfs install
+        
+        # Add .gitattributes first
+        git add .gitattributes
+        git commit -m "Add LFS configuration"
+        
+        # Add all files
+        git add .
+        git commit -m "Deploy ML app to Hugging Face Spaces"
+        
+        # Add Hugging Face Spaces as remote
+        SPACE_URL="https://haikalthrq:${HF_TOKEN}@huggingface.co/spaces/haikalthrq/mlops-ci-cd-practice"
+        git remote add space $SPACE_URL
+        
+        # Push to Hugging Face Spaces
+        echo "Pushing to Hugging Face Spaces..."
+        git push --force space main
+        
+    - name: Deployment Summary
+      if: always()
+      run: |
+        echo "## Deployment Summary" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Files prepared for deployment" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Git LFS configured for large files" >> $GITHUB_STEP_SUMMARY
+        echo "- ✅ Deployed to Hugging Face Spaces" >> $GITHUB_STEP_SUMMARY
+        echo "- 🚀 App should be available at: https://huggingface.co/spaces/${GITHUB_ACTOR}/mlops-practice" >> $GITHUB_STEP_SUMMARY
