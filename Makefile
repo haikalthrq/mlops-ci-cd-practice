@@ -48,7 +48,7 @@ deploy:
 	cp requirements.txt deploy_temp/
 	cp README.md deploy_temp/
 	cd deploy_temp && \
-	git init -b main && \
+	git init -b master && \
 	git lfs install && \
 	echo "*.pkl filter=lfs diff=lfs merge=lfs -text" > .gitattributes && \
 	echo "*.joblib filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
@@ -58,7 +58,7 @@ deploy:
 	git add . && \
 	git commit -m "Deploy ML app to Hugging Face Spaces" && \
 	git remote add space https://haikalthrq:$(HF)@huggingface.co/spaces/haikalthrq/mlops-ci-cd-practice && \
-	git push --force space main
+	git push --force space master
 	@echo "Deployment completed!"
 
 run:
