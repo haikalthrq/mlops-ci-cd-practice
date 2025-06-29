@@ -58,8 +58,8 @@ deploy:
 	cd deploy_temp && \
 	git init -b master && \
 	git lfs install && \
-	git config user.name "GitHub Actions" && \
-	git config user.email "actions@github.com" && \
+	git config user.name "$(USER_NAME)" && \
+	git config user.email "$(USER_EMAIL)" && \
 	echo "*.pkl filter=lfs diff=lfs merge=lfs -text" > .gitattributes && \
 	echo "*.joblib filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
 	echo "*.h5 filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
@@ -67,7 +67,7 @@ deploy:
 	echo "*.safetensors filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
 	git add . && \
 	git commit -m "Deploy ML app to Hugging Face Spaces" && \
-	git remote add space https://haikalthrq:$(HF)@huggingface.co/spaces/haikalthrq/mlops-ci-cd-practice && \
+	git remote add space https://haikalthrq:$(HF_TOKEN)@huggingface.co/spaces/haikalthrq/mlops-ci-cd-practice && \
 	git push --force space master
 	@echo "Deployment completed!"
 
