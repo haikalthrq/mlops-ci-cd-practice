@@ -4,7 +4,7 @@ on:
   workflow_run:
     workflows: ["Continuous Integration"]
     types: [completed]
-    branches: [main]
+    branches: [master]
   workflow_dispatch:
 
 jobs:
@@ -75,8 +75,8 @@ jobs:
       run: |
         cd deploy_temp
         
-        # Initialize git repository with main branch
-        git init -b main || (git init && git checkout -b main)
+        # Initialize git repository with master branch
+        git init -b master || (git init && git checkout -b master)
         git lfs install
         
         # Add .gitattributes first
@@ -93,7 +93,7 @@ jobs:
         
         # Push to Hugging Face Spaces
         echo "Pushing to Hugging Face Spaces..."
-        git push --force space main
+        git push --force space master
         
     - name: Deployment Summary
       if: always()
