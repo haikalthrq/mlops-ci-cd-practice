@@ -58,6 +58,8 @@ deploy:
 	cd deploy_temp && \
 	git init -b master && \
 	git lfs install && \
+	git config user.name "GitHub Actions" && \
+	git config user.email "actions@github.com" && \
 	echo "*.pkl filter=lfs diff=lfs merge=lfs -text" > .gitattributes && \
 	echo "*.joblib filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
 	echo "*.h5 filter=lfs diff=lfs merge=lfs -text" >> .gitattributes && \
