@@ -4,20 +4,44 @@ from skops.io import get_untrusted_types
 import os
 
 # Load the trained model
-model_path = "../model/drug_pipeline.skops"
+model_path = "./model/drug_pipeline.skops"
 if not os.path.exists(model_path):
-    # Fallback for Hugging Face Spaces deployment
-    model_path = "./model/drug_pipeline.skops"
+    # Fallback for local development
+    model_path = "../model/drug_pipeline.skops"
+if not os.path.exists(model_path):
+    # Last fallback
+    model_path = "./drug_pipeline.skops"
 
-unknown_types = get_untrusted_types(file=model_path)
-print("Trusted types we're loading:", unknown_types)
+print(f"Looking for model at: {model_path}")
+print(f"Current working directory: {os.getcwd()}")
+print(f"Files in current directory: {os.listdir('.')}")
 
-pipe = sio.load(model_path, trusted=unknown_types)
+if os.path.exists(model_path):
+    print(f"✅ Model found at: {model_path}")
+    try:
+        unknown_types = get_untrusted_types(file=model_path)
+        print("Trusted types we're loading:", unknown_types)
+        pipe = sio.load(model_path, trusted=unknown_types)
+        print("✅ Model loaded successfully!")
+    except Exception as e:
+        print(f"❌ Error loading model: {e}")
+        pipe = None
+else:
+    print(f"❌ Model NOT found at: {model_path}")
+    # List available paths for debugging
+    for root, dirs, files in os.walk('.'):
+        for file in files:
+            if file.endswith('.skops'):
+                print(f"Found .skops file: {os.path.join(root, file)}")
+    pipe = None
 
 def predict_drug(age, sex, blood_pressure, cholesterol, na_to_k_ratio):
     """
     Prediksi jenis obat berdasarkan karakteristik pasien
     """
+    if pipe is None:
+        return "❌ Error: Model tidak tersedia. Silakan cek log untuk detail."
+    
     try:
         features = [age, sex, blood_pressure, cholesterol, na_to_k_ratio]
         predicted_drug = pipe.predict([features])[0]
