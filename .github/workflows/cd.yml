@@ -24,4 +24,4 @@ jobs:
         echo "Starting deployment with HF token..."
         echo "Token exists: $(if [ -n "$HF_TOKEN" ]; then echo "YES"; else echo "NO"; fi)"
         echo "User: $USER_NAME <$USER_EMAIL>"
-        make deploy HF="$HF_TOKEN" USER_NAME="$USER_NAME" USER_EMAIL="$USER_EMAIL"
+        make deploy HF_TOKEN="$HF_TOKEN" USER_NAME="$USER_NAME" USER_EMAIL="$USER_EMAIL"
