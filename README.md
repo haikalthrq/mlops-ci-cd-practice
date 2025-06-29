@@ -1,3 +1,15 @@
+---
+title: MLOps CI/CD Practice
+emoji: 🚀
+colorFrom: blue
+colorTo: green
+sdk: gradio
+sdk_version: 3.50.0
+app_file: app/app.py
+pinned: false
+license: mit
+---
+
 # MLOps CI/CD Practice
 
 This project demonstrates the implementation of a Continuous Integration and Continuous Deployment (CI/CD) pipeline for a Machine Learning application using GitHub Actions and Hugging Face Spaces.

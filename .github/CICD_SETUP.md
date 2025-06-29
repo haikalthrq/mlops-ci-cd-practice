@@ -23,9 +23,10 @@ Sebelum workflows dapat berjalan dengan baik, Anda perlu mengatur secrets di Git
 ### 2. Hugging Face Space Setup
 1. Buka [Hugging Face Spaces](https://huggingface.co/spaces)
 2. Klik **"Create new Space"**
-3. Space name: `mlops-practice` (atau ubah sesuai keinginan di file `cd.yml`)
-4. License: Pilih yang sesuai
-5. Space SDK: **"Gradio"** atau **"Streamlit"** (sesuai dengan app Anda)
+3. Space name: `mlops-ci-cd-practice` (sesuai dengan nama di file `cd.yml`)
+4. License: Pilih yang sesuai (recommend: MIT)
+5. Space SDK: **"Gradio"** 
+6. Python version: **3.10**
 
 ## 🔄 Workflows Explanation
 
@@ -80,8 +81,9 @@ mlops-ci-cd-practice/
 ### Change Hugging Face Space Name
 Edit file `.github/workflows/cd.yml` line ~87:
 ```bash
-SPACE_URL="https://${GITHUB_ACTOR}:${HF_TOKEN}@huggingface.co/spaces/${GITHUB_ACTOR}/YOUR-SPACE-NAME"
+SPACE_URL="https://haikalthrq:${HF_TOKEN}@huggingface.co/spaces/haikalthrq/mlops-ci-cd-practice"
 ```
+**Note**: Ganti `haikalthrq` dengan username GitHub Anda yang sebenarnya.
 
 ### Add More Linting Rules
 Edit file `.github/workflows/ci.yml` di bagian flake8:

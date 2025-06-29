@@ -102,4 +102,4 @@ jobs:
         echo "- ✅ Files prepared for deployment" >> $GITHUB_STEP_SUMMARY
         echo "- ✅ Git LFS configured for large files" >> $GITHUB_STEP_SUMMARY
         echo "- ✅ Deployed to Hugging Face Spaces" >> $GITHUB_STEP_SUMMARY
-        echo "- 🚀 App should be available at: https://huggingface.co/spaces/${GITHUB_ACTOR}/mlops-practice" >> $GITHUB_STEP_SUMMARY
+        echo "- 🚀 App should be available at: https://huggingface.co/spaces/haikalthrq/mlops-ci-cd-practice" >> $GITHUB_STEP_SUMMARY
