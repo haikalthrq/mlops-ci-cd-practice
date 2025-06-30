@@ -68,7 +68,4 @@ make run
 - **Continuous Integration (CI)**: The CI workflow is defined in `.github/workflows/ci.yml`. It runs on every push and pull request to ensure code quality through linting.
   
 - **Continuous Deployment (CD)**: The CD workflow is defined in `.github/workflows/cd.yml`. It deploys the Gradio app to Hugging Face Spaces whenever changes are pushed to the main branch.
-
-## License
-
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+  
