@@ -1,11 +1,11 @@
 ---
 title: MLOps CI/CD Practice
-emoji: 🚀
+emoji: 🏥
 colorFrom: blue
 colorTo: green
 sdk: gradio
-sdk_version: 3.50.0
-app_file: app/app.py
+sdk_version: 4.0.0
+app_file: app.py
 pinned: false
 license: mit
 ---

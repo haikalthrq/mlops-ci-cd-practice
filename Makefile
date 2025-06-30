@@ -52,7 +52,7 @@ deploy:
 	pip install huggingface_hub[cli]
 	huggingface-cli login --token "$(HF_TOKEN)"
 	@echo "🚀 Uploading main app file..."
-	huggingface-cli upload haikalthrq/mlops-ci-cd-practice ./app/app.py app.py --repo-type=space --commit-message="Deploy main app file"
+	huggingface-cli upload haikalthrq/mlops-ci-cd-practice ./app.py app.py --repo-type=space --commit-message="Deploy main app file"
 	@echo "📁 Uploading model file..."
 	huggingface-cli upload haikalthrq/mlops-ci-cd-practice ./model/drug_pipeline.skops model/drug_pipeline.skops --repo-type=space --commit-message="Upload model file"
 	@echo "📋 Uploading requirements..."
@@ -62,6 +62,6 @@ deploy:
 	@echo "✅ Deployment completed!"
 
 run:
-	python app/app.py
+	python app.py
 
 .PHONY: install format test train eval update-branch deploy run
